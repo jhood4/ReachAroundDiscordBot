@@ -20,16 +20,13 @@ namespace ReachAroundDiscordBot
             client = new DiscordSocketClient();
             commands = new CommandService();
 
-            //highestVote();
-
-            // client.Ready += OnReady;
-
             services = new ServiceCollection()
                 .AddSingleton(client)
                 .AddSingleton(commands)
                 .BuildServiceProvider();
+            
 
-            const string token = "";
+            var token = Environment.GetEnvironmentVariable("DISCORD_KEY");
 
             client.Log += Client_Log;
             client.MessageReceived += CommandHandler;
