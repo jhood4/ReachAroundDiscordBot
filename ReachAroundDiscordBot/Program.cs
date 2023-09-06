@@ -16,7 +16,12 @@ namespace ReachAroundDiscordBot
 
         public async Task MainAsync()
         {
-            _client = new DiscordSocketClient();
+            var config = new DiscordSocketConfig()
+            {
+                GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
+            };
+
+            _client = new DiscordSocketClient(config);
             
             var services = ConfigureServices();
             await services.GetRequiredService<CommandHandlerService>().InitializeAsync();
@@ -30,13 +35,7 @@ namespace ReachAroundDiscordBot
 
         private ServiceProvider ConfigureServices()
         {
-            var intents = new DiscordSocketConfig()
-            {
-                GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
-            };
-            
             return new ServiceCollection()
-                .AddSingleton(intents)
                 .AddSingleton(_client)
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandlerService>()
